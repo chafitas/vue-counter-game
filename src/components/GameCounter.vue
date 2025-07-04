@@ -1,14 +1,8 @@
 <script setup>
 
-import { ref } from 'vue'
-
-const counter = ref(0)
-const increment = () => {
-    counter.value++
-}
-const decrement = () => {
-    counter.value--
-}
+import JSConfetti from 'js-confetti'
+import { getRandomNumbers } from '@/utils/randomNumbers'
+import { ref, watch } from 'vue'
 
 const { minNumber, maxNumber } = defineProps({
     minNumber: {
@@ -34,16 +28,38 @@ const { minNumber, maxNumber } = defineProps({
         })
     }
 })
-console.log(minNumber)
-console.log(maxNumber)
+
+const jsConfetti = new JSConfetti()
+
+const { initialRandomNumber, numberToGuess } = getRandomNumbers({ maxNumber, minNumber })
+
+const counter = ref(initialRandomNumber)
+const win = ref(false)
+
+const increment = () => {
+    if (maxNumber === counter.value) return
+    counter.value++
+}
+const decrement = () => {
+    if (counter.value === 0) return
+    counter.value--
+}
+
+watch(counter, () => {
+    if (counter.value === numberToGuess) {
+        jsConfetti.addConfetti()
+        win.value = true
+    }
+})
+
 </script>
 
 <template>
     <div class="counter-game">
         <span class="number">{{ counter }}</span>
         <div class="button-group">
-            <button @click="decrement">-</button>
-            <button @click="increment">+</button>
+            <button :disabled="win" @click="decrement">-</button>
+            <button :disabled="win" @click="increment">+</button>
         </div>
     </div>
 </template>
