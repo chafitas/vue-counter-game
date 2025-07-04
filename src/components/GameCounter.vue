@@ -2,14 +2,6 @@
 
 import { ref } from 'vue'
 
-const counter = ref(0)
-const increment = () => {
-    counter.value++
-}
-const decrement = () => {
-    counter.value--
-}
-
 const { minNumber, maxNumber } = defineProps({
     minNumber: {
         type: Number,
@@ -34,6 +26,15 @@ const { minNumber, maxNumber } = defineProps({
         })
     }
 })
+
+const counter = ref(0)
+const increment = () => {
+    counter.value++
+}
+const decrement = () => {
+    counter.value--
+}
+
 console.log(minNumber)
 console.log(maxNumber)
 </script>
